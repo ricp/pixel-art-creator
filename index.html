@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Art Creator</title>
+    <style>
+      /* Grid Container */
+      #grid {
+        display: grid;
+        grid-template-columns: repeat(100, 1fr);
+        grid-template-rows: repeat(100, 1fr);
+        width: 500px; /* Adjusted to 500px */
+        height: 500px; /* Adjusted to 500px */
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+
+      /* Individual Cell */
+      .cell {
+        width: 1fr;
+        height: 1fr;
+        border: 0.1px solid #eee;
+        box-sizing: border-box;
+      }
+
+      /* Color Palette */
+      #palette {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      .color {
+        width: 40px;
+        height: 40px;
+        margin: 0 5px;
+        cursor: pointer;
+        border: 2px solid #ccc;
+      }
+
+      /* Eraser */
+      .eraser {
+        background-color: white;
+        border: 2px dashed #000;
+      }
+
+      /* Active Color */
+      .selected {
+        border: 2px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="grid"></div>
+
+    <div id="palette">
+      <div class="color" style="background-color: #ff0000"></div>
+      <div class="color" style="background-color: #00ff00"></div>
+      <div class="color" style="background-color: #0000ff"></div>
+      <div class="color" style="background-color: #ffff00"></div>
+      <div class="color" style="background-color: #ff00ff"></div>
+      <div class="color" style="background-color: #00ffff"></div>
+      <div class="color" style="background-color: #000000"></div>
+      <div class="color" style="background-color: #ffffff"></div>
+      <div class="color eraser selected">Eraser</div>
+    </div>
+
+    <script>
+      // Initialize the grid with 100x100 cells
+      const grid = document.getElementById("grid");
+      for (let i = 0; i < 10000; i++) {
+        // 100 x 100 grid
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        grid.appendChild(cell);
+      }
+
+      // Handle color selection
+      let selectedColor = "white"; // Default to eraser
+
+      const palette = document.getElementById("palette");
+      palette.addEventListener("click", function (event) {
+        if (event.target.classList.contains("color")) {
+          document.querySelector(".selected").classList.remove("selected");
+          event.target.classList.add("selected");
+          selectedColor = event.target.style.backgroundColor || "white";
+        }
+      });
+
+      // Handle pixel placement
+      grid.addEventListener("click", function (event) {
+        if (event.target.classList.contains("cell")) {
+          event.target.style.backgroundColor = selectedColor;
+        }
+      });
+    </script>
+  </body>
+</html>
