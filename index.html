@@ -26,6 +26,15 @@
         font-family: "Press Start 2P", cursive;
       }
 
+      /* Pixel Counter */
+      #counter {
+        font-family: "Press Start 2P", cursive;
+        font-size: 24px;
+        color: #333;
+        margin: 10px 0;
+        letter-spacing: 1px;
+      }
+
       /* Grid Container */
       #grid {
         display: grid;
@@ -83,13 +92,6 @@
         border: 2px solid #000;
       }
 
-      /* Pixel Counter */
-      #counter {
-        text-align: center;
-        margin-top: 10px;
-        font-size: 18px;
-      }
-
       /* Protected Mode Button */
       #protected-mode {
         display: block;
@@ -121,6 +123,9 @@
     <!-- Banner -->
     <div id="banner">Pixel Art Creator</div>
 
+    <!-- Pixel Counter -->
+    <div id="counter">Pixels Created: 0</div>
+
     <!-- Grid -->
     <div id="grid"></div>
 
@@ -131,9 +136,6 @@
 
     <!-- Protected Mode Button -->
     <button id="protected-mode">Protected Mode</button>
-
-    <!-- Pixel Counter -->
-    <div id="counter">Pixels Created: 0</div>
 
     <script>
       // Initialize the grid with 100x100 cells
