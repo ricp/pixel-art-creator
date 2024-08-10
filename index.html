@@ -15,6 +15,12 @@
         margin: 20px auto;
         border: 1px solid #ccc;
         cursor: pointer;
+        transition: border-color 0.3s ease;
+      }
+
+      /* Subtle Visual Indicator for Protected Mode */
+      .protected {
+        border: 2px dashed #4caf50; /* Green dashed border */
       }
 
       /* Individual Cell */
@@ -57,6 +63,27 @@
         margin-top: 10px;
         font-size: 18px;
       }
+
+      /* Protected Mode Button */
+      #protected-mode {
+        display: block;
+        margin: 10px auto;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        width: 200px;
+        background-color: #888; /* Subtle gray for unprotected mode */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Protected Mode Button (Active) */
+      #protected-mode.active {
+        background-color: #4caf50; /* Green for protected mode */
+      }
     </style>
   </head>
   <body>
@@ -74,6 +101,8 @@
       <div class="color eraser selected">Eraser</div>
     </div>
 
+    <button id="protected-mode">Protected Mode</button>
+
     <div id="counter">Pixels Created: 0</div>
 
     <script>
@@ -90,6 +119,7 @@
       let selectedColor = "white"; // Default to eraser
       let isDrawing = false;
       let pixelCount = 0;
+      let protectedMode = false; // Start in Unprotected Mode
 
       const palette = document.getElementById("palette");
       palette.addEventListener("click", function (event) {
@@ -97,6 +127,21 @@
           document.querySelector(".selected").classList.remove("selected");
           event.target.classList.add("selected");
           selectedColor = event.target.style.backgroundColor || "white";
+        }
+      });
+
+      // Toggle Protected Mode
+      const protectedModeButton = document.getElementById("protected-mode");
+      protectedModeButton.addEventListener("click", function () {
+        protectedMode = !protectedMode;
+        if (protectedMode) {
+          protectedModeButton.textContent = "Unprotected Mode";
+          protectedModeButton.classList.add("active");
+          grid.classList.add("protected");
+        } else {
+          protectedModeButton.textContent = "Protected Mode";
+          protectedModeButton.classList.remove("active");
+          grid.classList.remove("protected");
         }
       });
 
@@ -129,11 +174,15 @@
       });
 
       function handleDrawing(cell) {
-        if (selectedColor !== "white" && cell.style.backgroundColor === "") {
-          // Drawing: Increment counter only if the cell was not previously colored
-          cell.style.backgroundColor = selectedColor;
-          pixelCount++;
-          updateCounter();
+        if (selectedColor !== "white") {
+          if (!protectedMode || cell.style.backgroundColor === "") {
+            // In Unprotected Mode or if the cell is uncolored, we can color it
+            if (cell.style.backgroundColor === "") {
+              pixelCount++;
+              updateCounter();
+            }
+            cell.style.backgroundColor = selectedColor;
+          }
         } else if (selectedColor === "white") {
           // Erasing: Just erase the color, but don't change the counter
           cell.style.backgroundColor = "";
