@@ -82,6 +82,20 @@
         color: #333;
       }
 
+      /* Clear Grid Button */
+      #clear-grid {
+        font-family: "Press Start 2P", cursive;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        background-color: #f44336; /* Red for clear action */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
       /* Grid Container */
       #grid {
         display: grid;
@@ -150,6 +164,7 @@
     <div id="controls">
       <button id="protected-mode">Protected Mode</button>
       <button id="eraser">Eraser</button>
+      <button id="clear-grid">Clear Grid</button>
     </div>
 
     <!-- Grid -->
@@ -170,7 +185,7 @@
         grid.appendChild(cell);
       }
 
-      // Initialize the color palette with 32 colors
+      // Initialize the color palette with 32 colors, including black and white
       const paletteColors = [
         "#FF0000",
         "#FF4000",
@@ -204,6 +219,8 @@
         "#008040",
         "#008080",
         "#004080",
+        "#000000",
+        "#FFFFFF", // Added black and white
       ];
 
       const palette = document.getElementById("palette");
@@ -250,6 +267,21 @@
         document.querySelector(".selected")?.classList.remove("selected");
         eraserButton.classList.add("selected");
         selectedColor = "white";
+      });
+
+      // Handle Clear Grid with Confirmation
+      const clearGridButton = document.getElementById("clear-grid");
+      clearGridButton.addEventListener("click", function () {
+        const confirmClear = confirm(
+          "Are you sure you want to clear the grid?"
+        );
+        if (confirmClear) {
+          grid.querySelectorAll(".cell").forEach((cell) => {
+            cell.style.backgroundColor = "";
+          });
+          pixelCount = 0;
+          updateCounter();
+        }
       });
 
       // Update pixel counter
