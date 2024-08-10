@@ -40,18 +40,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 20px;
+        gap: 10px;
         margin-bottom: 20px;
       }
 
       /* Protected Mode Button */
       #protected-mode {
         font-family: "Press Start 2P", cursive;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 10px 15px;
+        font-size: 14px;
         cursor: pointer;
         text-align: center;
-        background-color: #888; /* Subtle gray for unprotected mode */
+        background-color: orange; /* Default unprotected mode */
         color: white;
         border: none;
         border-radius: 5px;
@@ -66,8 +66,8 @@
       /* Eraser Button */
       #eraser {
         font-family: "Press Start 2P", cursive;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 10px 15px;
+        font-size: 14px;
         cursor: pointer;
         text-align: center;
         background-color: white;
@@ -85,8 +85,8 @@
       /* Clear Grid Button */
       #clear-grid {
         font-family: "Press Start 2P", cursive;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 10px 15px;
+        font-size: 14px;
         cursor: pointer;
         text-align: center;
         background-color: #f44336; /* Red for clear action */
@@ -99,26 +99,26 @@
       /* Grid Container */
       #grid {
         display: grid;
-        grid-template-columns: repeat(50, 1fr); /* Larger pixels */
-        grid-template-rows: repeat(50, 1fr); /* Larger pixels */
-        width: 500px;
-        height: 500px;
+        grid-template-columns: repeat(60, 1fr); /* Slightly larger grid */
+        grid-template-rows: repeat(60, 1fr); /* Slightly larger grid */
+        width: 600px;
+        height: 600px;
         margin: 20px auto;
         border: 1px solid #ccc;
         cursor: pointer;
-        transition: border-color 0.3s ease;
-        background-color: white;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        background-color: white; /* Default background color */
       }
 
-      /* Subtle Visual Indicator for Protected Mode */
-      .protected {
-        border: 2px dashed #4caf50; /* Green dashed border */
+      /* Protected Mode Grid Background */
+      .protected-mode {
+        background-color: #e0ffe0; /* Very light green */
       }
 
       /* Individual Cell */
       .cell {
-        width: 10px; /* Adjust size for larger pixels */
-        height: 10px; /* Adjust size for larger pixels */
+        width: 10px;
+        height: 10px;
         border: 0.1px solid #eee;
         box-sizing: border-box;
       }
@@ -126,17 +126,20 @@
       /* Color Palette */
       #palette {
         display: grid;
-        grid-template-columns: repeat(8, 1fr); /* Reduced to 32 colors */
+        grid-template-columns: repeat(
+          7,
+          1fr
+        ); /* Adjusted to fit the grid size */
         grid-gap: 5px;
         justify-content: center;
         margin-top: 10px;
-        width: 320px;
+        width: 420px;
         margin: 20px auto;
       }
 
       .color {
-        width: 40px;
-        height: 40px;
+        width: 50px; /* Increased size to match grid */
+        height: 50px; /* Increased size to match grid */
         cursor: pointer;
         border: 2px solid #ccc;
         box-sizing: border-box;
@@ -162,7 +165,7 @@
 
     <!-- Controls -->
     <div id="controls">
-      <button id="protected-mode">Protected Mode</button>
+      <button id="protected-mode">Unprotected Mode</button>
       <button id="eraser">Eraser</button>
       <button id="clear-grid">Clear Grid</button>
     </div>
@@ -176,17 +179,19 @@
     </div>
 
     <script>
-      // Initialize the grid with 50x50 cells for larger pixels
+      // Initialize the grid with 60x60 cells for slightly larger grid
       const grid = document.getElementById("grid");
-      for (let i = 0; i < 2500; i++) {
-        // 50 x 50 grid
+      for (let i = 0; i < 3600; i++) {
+        // 60 x 60 grid
         const cell = document.createElement("div");
         cell.classList.add("cell");
         grid.appendChild(cell);
       }
 
-      // Initialize the color palette with 32 colors, including black and white
+      // Initialize the color palette with 42 colors, including black and white first
       const paletteColors = [
+        "#000000",
+        "#FFFFFF", // Black and White first
         "#FF0000",
         "#FF4000",
         "#FF8000",
@@ -219,8 +224,12 @@
         "#008040",
         "#008080",
         "#004080",
-        "#000000",
-        "#FFFFFF", // Added black and white
+        "#800080",
+        "#400080",
+        "#800040",
+        "#804080",
+        "#C0C0C0",
+        "#FF00FF", // 2 additional colors
       ];
 
       const palette = document.getElementById("palette");
@@ -251,13 +260,15 @@
       protectedModeButton.addEventListener("click", function () {
         protectedMode = !protectedMode;
         if (protectedMode) {
-          protectedModeButton.textContent = "Unprotected Mode";
-          protectedModeButton.classList.add("active");
-          grid.classList.add("protected");
-        } else {
           protectedModeButton.textContent = "Protected Mode";
+          protectedModeButton.classList.add("active");
+          protectedModeButton.style.backgroundColor = "green";
+          grid.classList.add("protected-mode");
+        } else {
+          protectedModeButton.textContent = "Unprotected Mode";
           protectedModeButton.classList.remove("active");
-          grid.classList.remove("protected");
+          protectedModeButton.style.backgroundColor = "orange";
+          grid.classList.remove("protected-mode");
         }
       });
 
