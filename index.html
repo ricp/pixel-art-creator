@@ -125,7 +125,6 @@
         height: 600px;
         margin: 20px auto;
         border: 1px solid #ccc;
-        cursor: pointer;
         transition: background-color 0.3s ease, border-color 0.3s ease;
         background-color: white; /* Default background color */
       }
@@ -165,6 +164,15 @@
       /* Active Color */
       .selected {
         border: 2px solid #000;
+      }
+
+      /* Custom Cursors */
+      .cursor-pencil {
+        cursor: crosshair; /* Crosshair for drawing */
+      }
+
+      .cursor-eraser {
+        cursor: not-allowed; /* Not-allowed for erasing */
       }
     </style>
     <!-- Import Google Fonts for Pixel Art Style -->
@@ -276,6 +284,10 @@
           document.querySelector(".selected")?.classList.remove("selected");
           event.target.classList.add("selected");
           selectedColor = event.target.style.backgroundColor || "white";
+
+          // Set pencil cursor
+          grid.classList.add("cursor-pencil");
+          grid.classList.remove("cursor-eraser");
         }
       });
 
@@ -302,6 +314,10 @@
         document.querySelector(".selected")?.classList.remove("selected");
         eraserButton.classList.add("selected");
         selectedColor = "white";
+
+        // Set eraser cursor
+        grid.classList.add("cursor-eraser");
+        grid.classList.remove("cursor-pencil");
       });
 
       // Handle Clear Grid with Confirmation
