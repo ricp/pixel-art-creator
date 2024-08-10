@@ -142,23 +142,28 @@
         box-sizing: border-box;
       }
 
-      /* Color Palette */
-      #palette {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr); /* Adjusted for 44 colors */
-        grid-gap: 5px;
-        justify-content: center;
-        margin-top: 10px;
-        width: 400px; /* Adjusted width */
+      /* Color Picker Container */
+      #color-picker-container {
         margin: 20px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
       }
 
-      .color {
-        width: 25px; /* Reduced size */
-        height: 25px; /* Reduced size */
+      #color-label {
+        font-family: "Press Start 2P", cursive;
+        font-size: 14px;
+        color: #333;
+      }
+
+      #color-picker {
         cursor: pointer;
-        border: 2px solid #ccc;
-        box-sizing: border-box;
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: 5px;
+        background-color: #000; /* Default color */
       }
 
       /* Active Color */
@@ -205,9 +210,10 @@
     <!-- Grid -->
     <div id="grid"></div>
 
-    <!-- Color Palette -->
-    <div id="palette">
-      <!-- Dynamically Generated Color Blocks -->
+    <!-- Color Picker Container -->
+    <div id="color-picker-container">
+      <label id="color-label" for="color-picker">Choose Color:</label>
+      <input type="color" id="color-picker" value="#000000" />
     </div>
 
     <script>
@@ -220,75 +226,19 @@
         grid.appendChild(cell);
       }
 
-      // Initialize the color palette with 44 colors, including black and white first
-      const paletteColors = [
-        "#000000",
-        "#FFFFFF", // Black and White first
-        "#FF0000",
-        "#FF4000",
-        "#FF8000",
-        "#FFBF00",
-        "#FFFF00",
-        "#BFFF00",
-        "#80FF00",
-        "#40FF00",
-        "#00FF80",
-        "#00FFBF",
-        "#00FFFF",
-        "#00BFFF",
-        "#0080FF",
-        "#0040FF",
-        "#0000FF",
-        "#4000FF",
-        "#8000FF",
-        "#BF00FF",
-        "#FF00FF",
-        "#FF00BF",
-        "#FF0080",
-        "#FF0040",
-        "#800000",
-        "#804000",
-        "#808000",
-        "#408000",
-        "#008000",
-        "#008040",
-        "#008080",
-        "#004080",
-        "#800080",
-        "#400080",
-        "#800040",
-        "#804080",
-        "#C0C0C0",
-        "#FF00FF",
-        "#FFAA00",
-        "#FF55AA",
-      ];
-
-      const palette = document.getElementById("palette");
-
-      paletteColors.forEach((color) => {
-        const colorDiv = document.createElement("div");
-        colorDiv.classList.add("color");
-        colorDiv.style.backgroundColor = color;
-        palette.appendChild(colorDiv);
-      });
-
-      // Handle color selection
-      let selectedColor = "white"; // Default to eraser
+      let selectedColor = "#000000"; // Default to black
       let isDrawing = false;
       let pixelCount = 0;
       let protectedMode = false; // Start in Unprotected Mode
 
-      palette.addEventListener("click", function (event) {
-        if (event.target.classList.contains("color")) {
-          document.querySelector(".selected")?.classList.remove("selected");
-          event.target.classList.add("selected");
-          selectedColor = event.target.style.backgroundColor || "white";
+      const colorPicker = document.getElementById("color-picker");
+      colorPicker.addEventListener("input", function () {
+        selectedColor = this.value;
+        colorPicker.style.backgroundColor = selectedColor;
 
-          // Set pencil cursor
-          grid.classList.add("cursor-pencil");
-          grid.classList.remove("cursor-eraser");
-        }
+        // Set pencil cursor
+        grid.classList.add("cursor-pencil");
+        grid.classList.remove("cursor-eraser");
       });
 
       // Toggle Protected Mode
