@@ -5,17 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pixel Art Creator</title>
     <style>
+      /* Global Styles */
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      /* Banner */
+      #banner {
+        background-color: #4caf50;
+        padding: 20px 0;
+        color: white;
+        font-size: 36px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        font-family: "Press Start 2P", cursive;
+      }
+
       /* Grid Container */
       #grid {
         display: grid;
         grid-template-columns: repeat(100, 1fr);
         grid-template-rows: repeat(100, 1fr);
-        width: 500px; /* Adjusted to 500px */
-        height: 500px; /* Adjusted to 500px */
+        width: 500px;
+        height: 500px;
         margin: 20px auto;
         border: 1px solid #ccc;
         cursor: pointer;
         transition: border-color 0.3s ease;
+        background-color: white;
       }
 
       /* Subtle Visual Indicator for Protected Mode */
@@ -33,17 +55,21 @@
 
       /* Color Palette */
       #palette {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-gap: 5px;
         justify-content: center;
         margin-top: 10px;
+        width: 320px;
+        margin: 20px auto;
       }
 
       .color {
         width: 40px;
         height: 40px;
-        margin: 0 5px;
         cursor: pointer;
         border: 2px solid #ccc;
+        box-sizing: border-box;
       }
 
       /* Eraser */
@@ -85,24 +111,28 @@
         background-color: #4caf50; /* Green for protected mode */
       }
     </style>
+    <!-- Import Google Fonts for Pixel Art Style -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <!-- Banner -->
+    <div id="banner">Pixel Art Creator</div>
+
+    <!-- Grid -->
     <div id="grid"></div>
 
+    <!-- Color Palette -->
     <div id="palette">
-      <div class="color" style="background-color: #ff0000"></div>
-      <div class="color" style="background-color: #00ff00"></div>
-      <div class="color" style="background-color: #0000ff"></div>
-      <div class="color" style="background-color: #ffff00"></div>
-      <div class="color" style="background-color: #ff00ff"></div>
-      <div class="color" style="background-color: #00ffff"></div>
-      <div class="color" style="background-color: #000000"></div>
-      <div class="color" style="background-color: #ffffff"></div>
-      <div class="color eraser selected">Eraser</div>
+      <!-- Dynamically Generated Color Blocks -->
     </div>
 
+    <!-- Protected Mode Button -->
     <button id="protected-mode">Protected Mode</button>
 
+    <!-- Pixel Counter -->
     <div id="counter">Pixels Created: 0</div>
 
     <script>
@@ -115,16 +145,92 @@
         grid.appendChild(cell);
       }
 
+      // Initialize the color palette with 64 colors
+      const paletteColors = [
+        "#FF0000",
+        "#FF4000",
+        "#FF8000",
+        "#FFBF00",
+        "#FFFF00",
+        "#BFFF00",
+        "#80FF00",
+        "#40FF00",
+        "#00FF00",
+        "#00FF40",
+        "#00FF80",
+        "#00FFBF",
+        "#00FFFF",
+        "#00BFFF",
+        "#0080FF",
+        "#0040FF",
+        "#0000FF",
+        "#4000FF",
+        "#8000FF",
+        "#BF00FF",
+        "#FF00FF",
+        "#FF00BF",
+        "#FF0080",
+        "#FF0040",
+        "#FF0040",
+        "#FF0080",
+        "#FF00BF",
+        "#FF00FF",
+        "#BF00FF",
+        "#8000FF",
+        "#4000FF",
+        "#0000FF",
+        "#0040FF",
+        "#0080FF",
+        "#00BFFF",
+        "#00FFFF",
+        "#00FFBF",
+        "#00FF80",
+        "#00FF40",
+        "#00FF00",
+        "#40FF00",
+        "#80FF00",
+        "#BFFF00",
+        "#FFFF00",
+        "#FFBF00",
+        "#FF8000",
+        "#FF4000",
+        "#FF0000",
+        "#800000",
+        "#804000",
+        "#808000",
+        "#408000",
+        "#008000",
+        "#008040",
+        "#008080",
+        "#004080",
+        "#000080",
+        "#400080",
+        "#800080",
+        "#800040",
+        "#808080",
+        "#404040",
+        "#C0C0C0",
+        "#FFFFFF",
+      ];
+
+      const palette = document.getElementById("palette");
+
+      paletteColors.forEach((color) => {
+        const colorDiv = document.createElement("div");
+        colorDiv.classList.add("color");
+        colorDiv.style.backgroundColor = color;
+        palette.appendChild(colorDiv);
+      });
+
       // Handle color selection
       let selectedColor = "white"; // Default to eraser
       let isDrawing = false;
       let pixelCount = 0;
       let protectedMode = false; // Start in Unprotected Mode
 
-      const palette = document.getElementById("palette");
       palette.addEventListener("click", function (event) {
         if (event.target.classList.contains("color")) {
-          document.querySelector(".selected").classList.remove("selected");
+          document.querySelector(".selected")?.classList.remove("selected");
           event.target.classList.add("selected");
           selectedColor = event.target.style.backgroundColor || "white";
         }
