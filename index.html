@@ -126,20 +126,17 @@
       /* Color Palette */
       #palette {
         display: grid;
-        grid-template-columns: repeat(
-          7,
-          1fr
-        ); /* Adjusted to fit the grid size */
+        grid-template-columns: repeat(8, 1fr); /* Adjusted for 44 colors */
         grid-gap: 5px;
         justify-content: center;
         margin-top: 10px;
-        width: 420px;
+        width: 400px; /* Adjusted width */
         margin: 20px auto;
       }
 
       .color {
-        width: 50px; /* Increased size to match grid */
-        height: 50px; /* Increased size to match grid */
+        width: 25px; /* Reduced size */
+        height: 25px; /* Reduced size */
         cursor: pointer;
         border: 2px solid #ccc;
         box-sizing: border-box;
@@ -188,7 +185,7 @@
         grid.appendChild(cell);
       }
 
-      // Initialize the color palette with 42 colors, including black and white first
+      // Initialize the color palette with 44 colors, including black and white first
       const paletteColors = [
         "#000000",
         "#FFFFFF", // Black and White first
@@ -200,8 +197,6 @@
         "#BFFF00",
         "#80FF00",
         "#40FF00",
-        "#00FF00",
-        "#00FF40",
         "#00FF80",
         "#00FFBF",
         "#00FFFF",
@@ -229,7 +224,9 @@
         "#800040",
         "#804080",
         "#C0C0C0",
-        "#FF00FF", // 2 additional colors
+        "#FF00FF",
+        "#FFAA00",
+        "#FF55AA",
       ];
 
       const palette = document.getElementById("palette");
