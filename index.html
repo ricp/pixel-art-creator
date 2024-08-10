@@ -35,11 +35,58 @@
         letter-spacing: 1px;
       }
 
+      /* Controls Container */
+      #controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      /* Protected Mode Button */
+      #protected-mode {
+        font-family: "Press Start 2P", cursive;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        background-color: #888; /* Subtle gray for unprotected mode */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Protected Mode Button (Active) */
+      #protected-mode.active {
+        background-color: #4caf50; /* Green for protected mode */
+      }
+
+      /* Eraser Button */
+      #eraser {
+        font-family: "Press Start 2P", cursive;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        background-color: white;
+        color: #000;
+        border: 2px dashed #000;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      #eraser.selected {
+        background-color: #ddd;
+        color: #333;
+      }
+
       /* Grid Container */
       #grid {
         display: grid;
-        grid-template-columns: repeat(100, 1fr);
-        grid-template-rows: repeat(100, 1fr);
+        grid-template-columns: repeat(50, 1fr); /* Larger pixels */
+        grid-template-rows: repeat(50, 1fr); /* Larger pixels */
         width: 500px;
         height: 500px;
         margin: 20px auto;
@@ -56,8 +103,8 @@
 
       /* Individual Cell */
       .cell {
-        width: 1fr;
-        height: 1fr;
+        width: 10px; /* Adjust size for larger pixels */
+        height: 10px; /* Adjust size for larger pixels */
         border: 0.1px solid #eee;
         box-sizing: border-box;
       }
@@ -65,7 +112,7 @@
       /* Color Palette */
       #palette {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
+        grid-template-columns: repeat(8, 1fr); /* Reduced to 32 colors */
         grid-gap: 5px;
         justify-content: center;
         margin-top: 10px;
@@ -81,36 +128,9 @@
         box-sizing: border-box;
       }
 
-      /* Eraser */
-      .eraser {
-        background-color: white;
-        border: 2px dashed #000;
-      }
-
       /* Active Color */
       .selected {
         border: 2px solid #000;
-      }
-
-      /* Protected Mode Button */
-      #protected-mode {
-        display: block;
-        margin: 10px auto;
-        padding: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        width: 200px;
-        background-color: #888; /* Subtle gray for unprotected mode */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-      }
-
-      /* Protected Mode Button (Active) */
-      #protected-mode.active {
-        background-color: #4caf50; /* Green for protected mode */
       }
     </style>
     <!-- Import Google Fonts for Pixel Art Style -->
@@ -126,6 +146,12 @@
     <!-- Pixel Counter -->
     <div id="counter">Pixels Created: 0</div>
 
+    <!-- Controls -->
+    <div id="controls">
+      <button id="protected-mode">Protected Mode</button>
+      <button id="eraser">Eraser</button>
+    </div>
+
     <!-- Grid -->
     <div id="grid"></div>
 
@@ -134,20 +160,17 @@
       <!-- Dynamically Generated Color Blocks -->
     </div>
 
-    <!-- Protected Mode Button -->
-    <button id="protected-mode">Protected Mode</button>
-
     <script>
-      // Initialize the grid with 100x100 cells
+      // Initialize the grid with 50x50 cells for larger pixels
       const grid = document.getElementById("grid");
-      for (let i = 0; i < 10000; i++) {
-        // 100 x 100 grid
+      for (let i = 0; i < 2500; i++) {
+        // 50 x 50 grid
         const cell = document.createElement("div");
         cell.classList.add("cell");
         grid.appendChild(cell);
       }
 
-      // Initialize the color palette with 64 colors
+      // Initialize the color palette with 32 colors
       const paletteColors = [
         "#FF0000",
         "#FF4000",
@@ -173,30 +196,6 @@
         "#FF00BF",
         "#FF0080",
         "#FF0040",
-        "#FF0040",
-        "#FF0080",
-        "#FF00BF",
-        "#FF00FF",
-        "#BF00FF",
-        "#8000FF",
-        "#4000FF",
-        "#0000FF",
-        "#0040FF",
-        "#0080FF",
-        "#00BFFF",
-        "#00FFFF",
-        "#00FFBF",
-        "#00FF80",
-        "#00FF40",
-        "#00FF00",
-        "#40FF00",
-        "#80FF00",
-        "#BFFF00",
-        "#FFFF00",
-        "#FFBF00",
-        "#FF8000",
-        "#FF4000",
-        "#FF0000",
         "#800000",
         "#804000",
         "#808000",
@@ -205,14 +204,6 @@
         "#008040",
         "#008080",
         "#004080",
-        "#000080",
-        "#400080",
-        "#800080",
-        "#800040",
-        "#808080",
-        "#404040",
-        "#C0C0C0",
-        "#FFFFFF",
       ];
 
       const palette = document.getElementById("palette");
@@ -251,6 +242,14 @@
           protectedModeButton.classList.remove("active");
           grid.classList.remove("protected");
         }
+      });
+
+      // Handle eraser selection
+      const eraserButton = document.getElementById("eraser");
+      eraserButton.addEventListener("click", function () {
+        document.querySelector(".selected")?.classList.remove("selected");
+        eraserButton.classList.add("selected");
+        selectedColor = "white";
       });
 
       // Update pixel counter
