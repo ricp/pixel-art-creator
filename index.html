@@ -96,6 +96,26 @@
         transition: background-color 0.3s ease;
       }
 
+      /* Save/Load Buttons */
+      #save-load-container {
+        margin-top: 20px;
+      }
+
+      #save-drawing,
+      #load-drawing-btn {
+        font-family: "Press Start 2P", cursive;
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        text-align: center;
+        background-color: #4caf50; /* Green for buttons */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin: 5px;
+      }
+
       /* Grid Container */
       #grid {
         display: grid;
@@ -165,6 +185,13 @@
       <button id="protected-mode">Unprotected Mode</button>
       <button id="eraser">Eraser</button>
       <button id="clear-grid">Clear Grid</button>
+    </div>
+
+    <!-- Save/Load Container -->
+    <div id="save-load-container">
+      <button id="save-drawing">Save Drawing</button>
+      <input type="file" id="load-drawing" style="display: none" />
+      <button id="load-drawing-btn">Load Drawing</button>
     </div>
 
     <!-- Grid -->
@@ -335,6 +362,64 @@
           cell.style.backgroundColor = "";
         }
       }
+
+      // Save Drawing to File
+      document
+        .getElementById("save-drawing")
+        .addEventListener("click", function () {
+          const cells = Array.from(grid.querySelectorAll(".cell")).map(
+            (cell) => cell.style.backgroundColor || ""
+          );
+          const drawing = {
+            gridSize: 60, // 60x60 grid
+            pixels: cells,
+            pixelCount: pixelCount,
+          };
+          const drawingString = JSON.stringify(drawing);
+          const blob = new Blob([drawingString], { type: "application/json" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "pixel-art.json";
+          link.click();
+        });
+
+      // Load Drawing from File
+      document
+        .getElementById("load-drawing-btn")
+        .addEventListener("click", function () {
+          document.getElementById("load-drawing").click();
+        });
+
+      document
+        .getElementById("load-drawing")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (!file) {
+            console.log("No file selected");
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const drawing = JSON.parse(e.target.result);
+              console.log("Loaded drawing:", drawing); // Debugging output
+              if (drawing.gridSize === 60 && drawing.pixels.length === 3600) {
+                const cells = grid.querySelectorAll(".cell");
+                drawing.pixels.forEach((color, index) => {
+                  cells[index].style.backgroundColor = color;
+                });
+                pixelCount = drawing.pixelCount || 0;
+                updateCounter();
+              } else {
+                alert("Invalid drawing file.");
+              }
+            } catch (err) {
+              console.error("Error loading drawing:", err);
+              alert("Failed to load drawing.");
+            }
+          };
+          reader.readAsText(file);
+        });
     </script>
   </body>
 </html>
